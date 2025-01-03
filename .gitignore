@@ -1,0 +1,42 @@
+# Common build and output folders
+bin/
+obj/
+publish/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.userprefs
+
+# Logs and temporary files
+*.log
+*.tlog
+*.cache
+*.bak
+
+# Visual Studio and Rider
+.vs/
+.idea/
+.vscode/
+
+# Dependency and package folders
+packages/
+node_modules/
+
+# Entity Framework
+Migrations/
+
+# Publishing and deployment settings
+*.azurePubxml
+*.pubxml
+*.publishsettings
+
+# App settings
+appsettings.*.json
+
+# Other
+*.nupkg
+_ReSharper.*
+*.DotSettings.user
+.DS_Store
