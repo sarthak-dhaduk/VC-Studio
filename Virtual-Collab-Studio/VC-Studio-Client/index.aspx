@@ -16,6 +16,6 @@
     <title>VC-Studio</title>
 </head>
 <body>
-    <h1 class="text-center">Hello Client!</h1>
+    
 </body>
 </html>
