@@ -15,9 +15,9 @@
     <title>Forgot Password</title>
 </head>
 <body class="">
-           <div class="top-bar px-5">
-        <img src="../assets/icons/icon2.svg" alt="Icon">
-        <span class="gradient-text">Reset</span>
+    <div class="container-xl d-flex align-items-center justify-content-between p-3">
+        <img src="assets/icons/icon2.svg" alt="Sign Up Icon" width="30" height="30">
+        <span class="gradient-text fw-bolder">Reset</span>
     </div>
     <div class="p-5"></div>
     <div class="container d-flex justify-content-center align-items-center mt-5">
