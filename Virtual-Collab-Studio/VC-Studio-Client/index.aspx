@@ -23,27 +23,27 @@
             padding: 0;
         }
         /* Initial state - scrollbar hidden */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 12px;
-  opacity: 0; /* Hidden by default */
-  transition: opacity 0.3s ease; /* Smooth transition for visibility */
-}
+        ::-webkit-scrollbar {
+          width: 4px;
+          height: 12px;
+          opacity: 0; /* Hidden by default */
+          transition: opacity 0.3s ease; /* Smooth transition for visibility */
+        }
 
-::-webkit-scrollbar-track {
-  background: #00ffff00;
-  margin-top: 10px;
-}
+        ::-webkit-scrollbar-track {
+          background: #00ffff00;
+          margin-top: 10px;
+        }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 12px;
-  background: #555;
-}
+        ::-webkit-scrollbar-thumb {
+          border-radius: 12px;
+          background: #555;
+        }
 
-/* When scrolling */
-.scroll-visible ::-webkit-scrollbar {
-  opacity: 1; /* Visible while scrolling */
-}
+        /* When scrolling */
+        .scroll-visible ::-webkit-scrollbar {
+          opacity: 1; /* Visible while scrolling */
+        }
 
         .sidebar {
             background-color: #0D0F10;
