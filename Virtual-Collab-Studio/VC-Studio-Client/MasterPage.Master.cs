@@ -238,5 +238,163 @@ namespace VC_Studio_Client
                 }
             }
         }
+        protected void LinkButton_Click(object sender, EventArgs e)
+        {
+            LinkButton clickedButton = (LinkButton)sender;
+            string workspaceID = clickedButton.CommandArgument;
+            Session["ActiveRoomID"] = workspaceID;
+
+            string connectionString = ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = @"
+         SELECT CodeSnippet, ProgrammingLanguage, WorkspaceID 
+         FROM Workspaces 
+         WHERE WorkspaceID = @WorkspaceID";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@WorkspaceID", workspaceID);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                string codeSnippet = reader["CodeSnippet"]?.ToString() ?? string.Empty;
+                                string programmingLanguage = reader["ProgrammingLanguage"]?.ToString() ?? string.Empty;
+                                string WorkspaceID = reader["WorkspaceID"]?.ToString() ?? string.Empty;
+
+                                historyCode.Value = codeSnippet;
+                                historyLanguage.Value = programmingLanguage;
+                                historyId.Value = WorkspaceID;
+
+                                if (this.Page is index indexPage)
+                                {
+                                    indexPage.LoadSaveWorkspacesButton(workspaceID);
+                                }
+                            }
+                            else
+                            {
+                                Response.Write("<script>alert('Workspace not found.');</script>");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
+                }
+            }
+        }
+        protected void btnSaveChanges_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string userId = Session["UserId"].ToString();
+                string username = txtFirstName.Text.Trim();
+                string email = txtEmail.Text.Trim();
+                string mobile = txtMobile.Text.Trim();
+                string password = txtPassword.Text.Trim();
+
+                // Connection string
+                string connectionString = ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString;
+
+                // Fetch current values from the database
+                string currentUsername = "";
+                string currentEmail = "";
+                string currentMobile = "";
+                string currentPassword = "";
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string selectQuery = "SELECT Username, Email, ContactNumber, Password FROM Users WHERE UserID = @UserID";
+
+                    using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@UserID", userId);
+
+                        conn.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                currentUsername = reader["Username"].ToString();
+                                currentEmail = reader["Email"].ToString();
+                                currentMobile = reader["ContactNumber"].ToString();
+                                currentPassword = reader["Password"].ToString();
+                            }
+                        }
+                        conn.Close();
+                    }
+                }
+
+                // Build the update query dynamically based on changes
+                List<string> setClauses = new List<string>();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+
+                // Check if Username is different
+                if (!string.IsNullOrEmpty(username) && username != currentUsername)
+                {
+                    setClauses.Add("Username = @Username");
+                    parameters.Add(new SqlParameter("@Username", username));
+                }
+
+                // Check if Email is different
+                if (!string.IsNullOrEmpty(email) && email != currentEmail)
+                {
+                    setClauses.Add("Email = @Email");
+                    parameters.Add(new SqlParameter("@Email", email));
+                }
+
+                // Check if Mobile is different
+                if (!string.IsNullOrEmpty(mobile) && mobile != currentMobile)
+                {
+                    setClauses.Add("ContactNumber = @Mobile");
+                    parameters.Add(new SqlParameter("@Mobile", mobile));
+                }
+
+                // Check if Password is different
+                if (!string.IsNullOrEmpty(password) && password != currentPassword)
+                {
+                    setClauses.Add("Password = @Password");
+                    parameters.Add(new SqlParameter("@Password", password));
+                }
+
+                // If no fields are changed, exit
+                if (setClauses.Count == 0)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "NoChangeAlert", "alert('No changes detected.');", true);
+                    return;
+                }
+
+                // Construct the update query
+                string updateQuery = "UPDATE Users SET " + string.Join(", ", setClauses) + " WHERE UserID = @UserID";
+                parameters.Add(new SqlParameter("@UserID", userId));
+
+                // Execute the update query
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
+                    {
+                        cmd.Parameters.AddRange(parameters.ToArray());
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        ScriptManager.RegisterStartupScript(this, GetType(), "SuccessAlert", "alert('Data updated successfully!');", true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any errors
+                ScriptManager.RegisterStartupScript(this, GetType(), "ErrorAlert", $"alert('An error occurred: {ex.Message}');", true);
+            }
+        }
     }
 }
