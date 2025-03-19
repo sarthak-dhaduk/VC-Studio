@@ -1,0 +1,455 @@
+﻿:root {
+    scroll-behavior: smooth;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Helvetica, sans-serif;
+    font-weight: 400;
+    background: #131619;
+    color: #e8e9e9;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    -ms-overflow-style: none;
+    overflow-y: auto;
+    scrollbar-width: none;
+    scrollbar-color: #aab7cf transparent;
+}
+
+
+    body::-webkit-scrollbar {
+        display: none;
+    }
+
+
+a {
+    color: #4154f1;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #717ff5;
+        text-decoration: none;
+    }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Helvetica Neue", Helvetica, sans-serif, Arial;
+}
+
+/*--------------------------------------------------------------
+# Main
+--------------------------------------------------------------*/
+#main {
+    padding: 12px 12px;
+    transition: all 0.3s;
+    overflow-y: auto;
+    scrollbar-width: none;
+    scrollbar-color: #aab7cf transparent;
+}
+
+/* .main {
+  flex-grow: 1;
+  padding: 15px;
+  background-color: #131619;
+  transition: margin-left 0.3s ease-in-out;
+} */
+
+@media (max-width: 1199px) {
+    #main {
+        padding: 20px;
+    }
+}
+
+/*--------------------------------------------------------------
+# Custom CSS for the Components
+--------------------------------------------------------------*/
+
+/* Hide the default Bootstrap chevron icon */
+.accordion-button::after {
+    display: none;
+}
+
+.star {
+    font-size: 30px;
+    color: #CCCCCC;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+    .star:hover,
+    .star.active {
+        color: #FFD700;
+    }
+.tech-slideshow {
+    position: relative;
+    height: clamp(3em, 10vw, 6em);
+    overflow: hidden;
+}
+
+.marquee-img {
+    display: flex;
+    position: absolute;
+    left: 100%;
+    animation: marquee-1 9s infinite linear;
+}
+
+    .marquee-img .card {
+        height: auto;
+        width: 100px;
+        margin-right: 1em;
+    }
+
+@media (max-width: 768px) {
+    .flex-shrink-0 {
+        width: 69% !important;
+        margin-left: -70px;
+    }
+}
+
+@keyframes marquee-1 {
+    0% {
+        left: 100%;
+    }
+
+    100% {
+        left: 0;
+        transform: translateX(-100%);
+    }
+}
+
+.tech-slideshow-2 {
+    position: relative;
+    height: clamp(3em, 10vw, 6em);
+    overflow: hidden;
+}
+
+.marquee-img-2 {
+    display: flex;
+    position: absolute;
+    width: max-content; /* Ensure the container's width adjusts to its content */
+    animation: marquee-2 9s linear infinite; /* Smooth continuous animation */
+}
+
+    .marquee-img-2 .card {
+        height: auto;
+        width: 100px;
+        margin-right: 1em;
+    }
+
+@keyframes marquee-2 {
+    0% {
+        transform: translateX(-100%); /* Start off-screen to the right */
+    }
+
+    100% {
+        transform: translateX(100%); /* End off-screen to the left */
+    }
+}
+
+
+.title-bar {
+    height: 30rem;
+    border-radius: 15px;
+}
+
+.background-overlay {
+    background-color: black;
+    border-radius: 15px;
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top right, rgb(182, 240, 156), transparent 40%), radial-gradient(ellipse farthest-corner at bottom left, rgba(77, 98, 229, 0.47), transparent 44%);
+    z-index: 1;
+}
+
+.card-height {
+    min-height: 228px;
+}
+
+.grid-overlay {
+    position: absolute;
+    border-radius: 15px;
+    inset: 0;
+    background-image: linear-gradient(transparent, transparent 95%, rgba(255, 255, 255, 0.08)), linear-gradient(90deg, transparent, transparent 95%, rgba(255, 255, 255, 0.06));
+    background-size: 40px 40px;
+    z-index: 2;
+}
+
+.content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    /* Center-align text horizontally */
+    max-width: 800px;
+}
+
+
+.main-heading {
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #93fdf4;
+}
+
+.sub-heading {
+    font-size: 1.2rem;
+    margin-top: 15px;
+    color: #bfbfbf;
+}
+
+.custom-input-group-text {
+    background-color: #1c1f26;
+    color: #ffffff;
+    border: 1px solid #363a3d;
+    border-radius: 8px 0 0 8px;
+    padding: 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    border-right: none;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #4D62E5 0%, #87DDEE 45%, #B6F09C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Custom CSS for Accordion */
+.code-editor {
+    background-color: #222222;
+}
+
+code {
+    background-color: #222222;
+}
+
+.btn-outline-secondary {
+    background-color: #222222;
+    color: white;
+}
+
+/* Common styles for all accordions */
+.accordion-container {
+    border-radius: 22px;
+    border: 2px solid #1A1D21;
+    background-color: #0D0F10;
+}
+
+.accordion-item {
+    border: 0px !important;
+}
+
+#accordionDescription .accordion-item {
+    background-color: #0D0F10;
+    border: none;
+}
+
+#accordionDescription .accordion-header {
+    background-color: #0D0F10;
+    /* color: white; */
+}
+
+#accordionDescription .accordion-button {
+    color: #FFFFFF;
+    background-color: #0D0F10;
+    border: 0px;
+}
+
+    #accordionDescription .accordion-button.collapsed {
+        background-color: #0D0F10;
+    }
+
+#accordionDescription .accordion-collapse {
+    background-color: #0D0F10;
+}
+
+#accordionDescription .accordion-body {
+    color: #9B9C9E;
+}
+
+    #accordionDescription .accordion-body strong {
+        color: #f8f9fa;
+    }
+
+#accordionDescription .accordion-button::before,
+#accordionDescription .accordion-button::after {
+    border-bottom: none;
+    border: 0px;
+}
+
+#accordionReview .accordion-item {
+    background-color: #0D0F10;
+    border: none;
+}
+
+#accordionReview .accordion-header {
+    background-color: #0D0F10;
+    color: white;
+}
+
+#accordionReview .accordion-button {
+    outline: 0;
+    color: #FFFFFF;
+    background-color: #0D0F10;
+    border: none;
+}
+
+    #accordionReview .accordion-button.collapsed {
+        outline: 0;
+        background-color: #0D0F10;
+    }
+
+#accordionReview .accordion-collapse {
+    outline: 0;
+    background-color: #0D0F10;
+}
+
+#accordionReview .accordion-body {
+    color: #9B9C9E;
+}
+
+    #accordionReview .accordion-body strong {
+        color: #f8f9fa;
+    }
+
+#accordionReview .accordion-button::before,
+#accordionReview .accordion-button::after {
+    border-bottom: none;
+    border: 0px;
+}
+
+.accordion-icon {
+    transition: transform 0.3s ease;
+}
+
+.accordion-button[aria-expanded="true"] .accordion-icon {
+    transform: rotate(180deg);
+}
+
+.accordion-button[aria-expanded="false"] .accordion-icon {
+    transform: rotate(0deg);
+}
+
+#headingDescription .accordion-button::after {
+    display: none;
+    border: 0px;
+}
+
+#headingReview .accordion-button::after {
+    display: none;
+}
+
+.resizable-div {
+    overflow: hidden;
+    resize: vertical;
+    border: 1px solid #686B6E;
+    padding: 0;
+}
+
+#hideThisDiv {
+    transition: max-height 0.5s ease;
+}
+
+.input-field {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+    .input-field label {
+        color: #ffffff;
+        margin-bottom: 8px;
+        font-weight: normal;
+    }
+
+.modal-body {
+    padding: 20px;
+    color: #9b9c9e;
+}
+
+.modal-header {
+    border-bottom: none !important;
+}
+
+.modal-content {
+    background-color: #1a1d21;
+    border-radius: 16px;
+    box-shadow: inset 0px 4px 8px rgba(255, 255, 255, 0.08);
+    /* Inner shadow */
+}
+
+.input-field input,
+.input-field textarea {
+    width: 100%;
+    background-color: #1c1f26;
+    color: #ffffff;
+    border: 1px solid #363a3d;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+}
+
+.input-field textarea {
+    resize: none;
+}
+
+    .input-field input::placeholder,
+    .input-field textarea::placeholder {
+        color: #9b9c9e;
+        font-size: 16px;
+    }
+
+.custom-input-field {
+    /* width: min-content; */
+    margin-bottom: 16px;
+}
+
+    .custom-input-field input,
+    .custom-input-field textarea {
+        /* width: min-content; */
+        background-color: #1c1f26;
+        color: #ffffff;
+        border: 1px solid #363a3d;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 16px;
+        box-sizing: border-box;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .custom-input-field textarea {
+        resize: none;
+    }
+
+.form-control:focus {
+    outline: none;
+    border-color: #000000;
+    color: #FFFFFF;
+    background-color: #1c1f26;
+}
+
+.custom-input-field input::placeholder,
+.custom-input-field textarea::placeholder {
+    color: #9b9c9e;
+    font-size: 16px;
+}
+
+.save-btn {
+    border-color: #0D0F10 !important;
+    border-radius: 16px !important;
+    appearance: none !important;
+    outline: none !important;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1) !important;
+    padding: 9px 14px !important;
+}
