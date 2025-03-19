@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="about.aspx" />
+    <Content Include="assets\bootstrap-icons\bootstrap-icons.css" />
+    <Content Include="assets\bootstrap-icons\bootstrap-icons.min.css" />
     <Content Include="assets\css\style.css" />
     <Content Include="assets\css\style.main.css" />
     <Content Include="assets\icons\icon1.svg" />
@@ -129,6 +131,12 @@
     <Compile Include="login.aspx.designer.cs">
       <DependentUpon>login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MasterPage.Master.cs">
+      <DependentUpon>MasterPage.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage.Master.designer.cs">
+      <DependentUpon>MasterPage.Master</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="register.aspx.cs">
       <DependentUpon>register.aspx</DependentUpon>
@@ -155,6 +163,11 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="MasterPage.Master" />
+    <Content Include="assets\bootstrap-icons\bootstrap-icons.json" />
+    <Content Include="assets\bootstrap-icons\bootstrap-icons.scss" />
+    <Content Include="assets\bootstrap-icons\fonts\bootstrap-icons.woff" />
+    <Content Include="assets\bootstrap-icons\fonts\bootstrap-icons.woff2" />
     <None Include="packages.config" />
     <Content Include="Scripts\bootstrap.min.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />
