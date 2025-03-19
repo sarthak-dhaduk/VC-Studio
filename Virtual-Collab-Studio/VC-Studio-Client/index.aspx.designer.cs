@@ -13,5 +13,32 @@ namespace VC_Studio_Client
 
     public partial class index
     {
+
+        /// <summary>
+        /// activeCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField activeCode;
+
+        /// <summary>
+        /// activeLanguage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField activeLanguage;
+
+        /// <summary>
+        /// saveWorkSpaceChanges control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder saveWorkSpaceChanges;
     }
 }
