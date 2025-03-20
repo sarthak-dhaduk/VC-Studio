@@ -75,6 +75,7 @@
     <Content Include="assets\icons\icon1.svg" />
     <Content Include="assets\icons\icon2.svg" />
     <Content Include="assets\js\script.main.js" />
+    <Content Include="contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -110,6 +111,12 @@
     </Compile>
     <Compile Include="about.aspx.designer.cs">
       <DependentUpon>about.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="contact.aspx.cs">
+      <DependentUpon>contact.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="contact.aspx.designer.cs">
+      <DependentUpon>contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="forgot-password.aspx.cs">
       <DependentUpon>forgot-password.aspx</DependentUpon>
