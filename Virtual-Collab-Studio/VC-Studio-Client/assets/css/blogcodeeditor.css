@@ -1,0 +1,42 @@
+﻿#blogSnippet {
+    width: 100%;
+    height: 500px;
+    background: transparent !important;
+}
+
+.monaco-editor {
+    background-color: #0D0F10 !important;
+    border: 0.1px solid #282828;
+}
+
+.monaco-editor-background {
+    background: transparent !important;
+}
+
+.margin {
+    background: transparent !important;
+}
+
+canvas {
+    height: 499px !important;
+}
+
+.minimap-decorations-layer {
+    display: none !important;
+    background-color: #000000b8 !important;
+    border: 0.1px solid #282828;
+    height: 0px !important;
+    width: 0px !important;
+}
+
+.decorationsOverviewRuler {
+    width: 0px !important;
+}
+
+.slider-mouseover {
+    display: none !important;
+}
+.presentation{
+    display: none;
+    width: 0px !important;
+}

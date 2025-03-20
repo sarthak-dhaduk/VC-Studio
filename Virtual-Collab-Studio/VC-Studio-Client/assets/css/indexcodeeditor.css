@@ -1,0 +1,32 @@
+﻿#codeEditor {
+    width: 100%;
+    height: 500px;
+    background: transparent !important;
+}
+
+.monaco-editor {
+    background-color: #0D0F10 !important;
+    border: 0.1px solid #282828;
+}
+
+.monaco-editor-background {
+    background: transparent !important;
+}
+
+.margin {
+    background: transparent !important;
+}
+
+canvas {
+    height: 499px !important;
+}
+
+.minimap-decorations-layer {
+    background-color: #000000b8 !important;
+    border: 0.1px solid #282828;
+    height: 499px !important;
+}
+
+.decorationsOverviewRuler {
+    width: 0px !important;
+}
