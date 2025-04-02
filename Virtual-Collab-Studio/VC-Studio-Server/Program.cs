@@ -1,3 +1,9 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using VC_Studio_Server;
+using System.Threading.Tasks;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,21 +11,15 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+// Start WebSocket server on a separate thread
+Task.Run(() => new WebSocketServer("http://localhost:8080/").StartAsync());
 
-app.UseHttpsRedirection();
+// Enable serving static files from wwwroot
 app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
-
+// Configure MVC Routes
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

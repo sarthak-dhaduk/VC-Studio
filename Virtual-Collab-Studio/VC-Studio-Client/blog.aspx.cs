@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -16,118 +15,43 @@ namespace VC_Studio_Client
         {
             if (!IsPostBack)
             {
-                BindBlogs();
+                LoadUserRatings();
+                int blogId = 1; // Hardcoded BlogID for now
+                BindRating(blogId);
+
+
             }
+
         }
 
-        private void BindBlogs()
+        private void BindRating(int blogId)
         {
-            string searchQuery = Request.QueryString["search"];
-            string query;
+            string connectionString = ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString;
+            string query = "SELECT AVG(CAST(RatingValue AS FLOAT)) AS AverageRating FROM Ratings WHERE BlogID = @BlogID";
 
-            // If search query is provided, check if it starts with '@'
-            if (!string.IsNullOrEmpty(searchQuery))
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                // If the search starts with '@', filter by Email
-                if (searchQuery.StartsWith("@"))
-                {
-                    query = "SELECT * FROM Blogs WHERE Email LIKE @SearchQuery";
-                    // Remove the '@' symbol and use the rest of the email for the query
-                    searchQuery = searchQuery.Substring(1);
-                }
-                else
-                {
-                    // Otherwise, search by Title
-                    query = "SELECT * FROM Blogs WHERE Title LIKE @SearchQuery";
-                }
-            }
-            else
-            {
-                // No search query, fetch all blogs
-                query = "SELECT * FROM Blogs";
-            }
-
-            DataTable dtBlogs = GetData(query, searchQuery);
-
-            if (dtBlogs.Rows.Count > 0)
-            {
-                rptBlogs.DataSource = dtBlogs;
-                rptBlogs.DataBind();
-            }
-            else
-            {
-                rptBlogs.DataSource = null;
-                rptBlogs.DataBind();
-            }
-        }
-        [System.Web.Services.WebMethod]
-        public static List<string> GetSuggestions(string query)
-        {
-            List<string> suggestions = new List<string>();
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string sqlQuery = "SELECT Title FROM Blogs WHERE Title LIKE @Query OR Description LIKE @Query";
-                using (SqlCommand cmd = new SqlCommand(sqlQuery, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Query", "%" + query + "%");
-                    conn.Open();
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            suggestions.Add(reader["Title"].ToString());
-                        }
-                    }
-                }
-            }
-
-            return suggestions;
-        }
-
-        private DataTable GetData(string query, string searchQuery = null)
-        {
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    // Add the search parameter if the search query exists
-                    if (!string.IsNullOrEmpty(searchQuery))
-                    {
-                        cmd.Parameters.AddWithValue("@SearchQuery", "%" + searchQuery + "%");
-                    }
-
-                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        sda.Fill(dt);
-                        return dt;
-                    }
-                }
-            }
-        }
-
-        private DataTable GetReviewsForBlog(string blogId)
-        {
-            string query = "SELECT r.RatingValue, u.Username " +
-                           "FROM Ratings r " +
-                           "INNER JOIN Users u ON r.Email = u.Email " +
-                           "WHERE r.BlogID = @BlogID";
-
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@BlogID", blogId);
-                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                    try
                     {
-                        DataTable dtReviews = new DataTable();
-                        sda.Fill(dtReviews);
-                        return dtReviews;
+                        con.Open();
+                        object result = cmd.ExecuteScalar();
+                        if (result != DBNull.Value && result != null)
+                        {
+                            lblRating.Text = Math.Round(Convert.ToDouble(result), 1).ToString(); // Set the average rating
+                        }
+                        else
+                        {
+                            lblRating.Text = "0.0"; // Default if no ratings
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log error (optional)
+                        lblRating.Text = "Error"; // Display error
                     }
                 }
             }
@@ -135,153 +59,148 @@ namespace VC_Studio_Client
 
         protected void SubmitRating(object sender, EventArgs e)
         {
-            string email = Session["Email"]?.ToString();
-            string ratingValueStr = Request.Form["ratingValue"];
-            string blogId = Request.Form["userblogId"];
 
-            // Validate the rating value
-            if (string.IsNullOrEmpty(ratingValueStr) || !int.TryParse(ratingValueStr, out int ratingValue) || ratingValue < 1 || ratingValue > 5)
+            int blogId = 1; // Replace with dynamically retrieved BlogID
+            string email = "yash@gmail.com"; // Replace with the logged-in user's email
+            string ratingValue = Request.Form["ratingValue"]; // Replace with the actual form value
+
+            if (string.IsNullOrEmpty(ratingValue))
             {
-                Response.Write("<script>alert('Please provide a valid rating between 1 and 5.');</script>");
+                Response.Write("<script>alert('Rating value is required.');</script>");
                 return;
             }
 
-            string connectionString = ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString;
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\New_Virtual\\Virtual-Collab-Studio\\VC-Studio-Client\\App_Data\\VirtualCollabStudioDB.mdf;Integrated Security=True";
 
-                    using (SqlConnection connection = new SqlConnection(connectionString))
-                    {
-                        connection.Open();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
 
-                        string checkQuery = @"
+                // Check if a rating already exists for this BlogID and Email
+                string checkQuery = @"
                     SELECT COUNT(*)
                     FROM Ratings
                     WHERE BlogID = @BlogID AND Email = @Email";
 
-                        string updateQuery = @"
+                string updateQuery = @"
                     UPDATE Ratings
                     SET RatingValue = @RatingValue
                     WHERE BlogID = @BlogID AND Email = @Email";
 
-                        string insertQuery = @"
+                string insertQuery = @"
                     INSERT INTO Ratings (RatingID, BlogID, Email, RatingValue)
                     VALUES (@RatingID, @BlogID, @Email, @RatingValue)";
 
-                        using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
-                        {
-                            checkCommand.Parameters.AddWithValue("@BlogID", blogId);
-                            checkCommand.Parameters.AddWithValue("@Email", email);
-
-                            int count = (int)checkCommand.ExecuteScalar();
-
-                            if (count > 0)
-                            {
-                                using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
-                                {
-                                    updateCommand.Parameters.AddWithValue("@BlogID", blogId);
-                                    updateCommand.Parameters.AddWithValue("@Email", email);
-                                    updateCommand.Parameters.AddWithValue("@RatingValue", ratingValue);
-
-                                    updateCommand.ExecuteNonQuery();
-                                }
-
-                                Response.Write("<script>alert('Your rating has been updated successfully.');</script>");
-                            }
-                            else
-                            {
-                                using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
-                                {
-                                    string ratingId = Guid.NewGuid().ToString();
-
-                                    insertCommand.Parameters.AddWithValue("@RatingID", ratingId);
-                                    insertCommand.Parameters.AddWithValue("@BlogID", blogId);
-                                    insertCommand.Parameters.AddWithValue("@Email", email);
-                                    insertCommand.Parameters.AddWithValue("@RatingValue", ratingValue);
-
-                                    insertCommand.ExecuteNonQuery();
-                                }
-
-                                Response.Write("<script>alert('Your rating has been submitted successfully.');</script>");
-                            }
-                        }
-                    }
-
-            BindBlogs();
-        }
-        protected string GetStars(object ratingValue)
-        {
-            int rating = Convert.ToInt32(ratingValue);
-            string stars = "";
-
-            for (int i = 0; i < rating; i++)
-            {
-                stars += "<span style='color: gold;'>&#9733;</span>";
-            }
-
-            for (int i = rating; i < 5; i++)
-            {
-                stars += "<span style='color: gray;'>&#9734;</span>";
-            }
-
-            return stars;
-        }
-
-        private double GetAverageRating(string blogId)
-        {
-            string query = "SELECT AVG(RatingValue) FROM Ratings WHERE BlogID = @BlogID";
-
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
                 {
-                    cmd.Parameters.AddWithValue("@BlogID", blogId);
-                    conn.Open();
-                    var result = cmd.ExecuteScalar();
+                    checkCommand.Parameters.AddWithValue("@BlogID", blogId);
+                    checkCommand.Parameters.AddWithValue("@Email", email);
 
-                    if (result != DBNull.Value)
+                    int count = (int)checkCommand.ExecuteScalar();
+
+                    if (count > 0)
                     {
-                        return Convert.ToDouble(result);
+                        // Update the existing rating
+                        using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                        {
+                            updateCommand.Parameters.AddWithValue("@BlogID", blogId);
+                            updateCommand.Parameters.AddWithValue("@Email", email);
+                            updateCommand.Parameters.AddWithValue("@RatingValue", ratingValue);
+
+                            updateCommand.ExecuteNonQuery();
+                        }
                     }
                     else
                     {
-                        return 0;
+                        // Insert a new rating
+                        using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                        {
+                            int ratingId = new Random().Next(10000000, 99999999);
+
+                            insertCommand.Parameters.AddWithValue("@RatingID", ratingId);
+                            insertCommand.Parameters.AddWithValue("@BlogID", blogId);
+                            insertCommand.Parameters.AddWithValue("@Email", email);
+                            insertCommand.Parameters.AddWithValue("@RatingValue", ratingValue);
+
+                            insertCommand.ExecuteNonQuery();
+                        }
                     }
                 }
             }
+
+            Response.Write("<script>alert('Rating submitted successfully.');</script>");
         }
-
-
-        protected void rptBlogs_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        private void LoadUserRatings()
         {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\New_Virtual\\Virtual-Collab-Studio\\VC-Studio-Client\\App_Data\\VirtualCollabStudioDB.mdf;Integrated Security=True"; // Update with your DB connection string
+            string query = "SELECT Email, RatingValue FROM Ratings";
+
+            try
             {
-                string blogId = DataBinder.Eval(e.Item.DataItem, "BlogId").ToString();
-
-                double averageRating = GetAverageRating(blogId);
-
-                Label lblRating = (Label)e.Item.FindControl("lblRating");
-                if (lblRating != null)
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    lblRating.Text = averageRating.ToString("0.0");
-                }
+                    SqlCommand command = new SqlCommand(query, connection);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
 
-                Repeater rptReviews = (Repeater)e.Item.FindControl("rptReviews");
-
-                DataTable dtReviews = GetReviewsForBlog(blogId);
-
-                if (dtReviews.Rows.Count > 0)
-                {
-                    rptReviews.DataSource = dtReviews;
-                    rptReviews.DataBind();
+                    while (reader.Read())
+                    {
+                        string email = reader["Email"].ToString();
+                        int rating = Convert.ToInt32(reader["RatingValue"]);
+                        reviewsList.InnerHtml += GenerateReviewHtml(email, rating);
+                    }
                 }
-                else
-                {
-                    rptReviews.DataSource = null;
-                    rptReviews.DataBind();
-                }
+            }
+            catch (Exception ex)
+            {
+                // Handle errors (e.g., log the exception)
+                Console.WriteLine(ex.Message);
             }
         }
 
+        //private void LoadBlogRating()
+        //{
+        //    string blogId = Request.QueryString["id"]; // Assume the blog ID is passed in the URL
+        //    if (string.IsNullOrEmpty(blogId)) return;
 
+        //    // Fetch the average rating from the database for the specific blog
+        //    string query = "SELECT AVG(rating) as avgRating FROM Reviews WHERE blogId = @BlogId";
+        //    using (SqlConnection conn = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\New_Virtual\\Virtual-Collab-Studio\\VC-Studio-Client\\App_Data\\VirtualCollabStudioDB.mdf;Integrated Security=True"))
+        //    {
+        //        conn.Open();
+        //        SqlCommand cmd = new SqlCommand(query, conn);
+        //        cmd.Parameters.AddWithValue("@BlogId", blogId);
 
+        //        var result = cmd.ExecuteScalar();
+        //        if (result != DBNull.Value)
+        //        {
+        //            double averageRating = Convert.ToDouble(result);
+        //            // Set the average rating in the UI
+        //            lblRating.Text = averageRating.ToString("0.0"); // Display as "4.5"
+        //        }
+        //        else
+        //        {
+        //            // If no ratings are available, set a default value
+        //            lblRating.Text = "0.0";
+        //        }
+        //    }
+        //}
+
+        private string GenerateReviewHtml(string email, int rating)
+        {
+            string stars = new string('⭐', rating); // Generate stars based on rating
+            string initial = email.Length > 0 ? email[0].ToString().ToUpper() : "?";
+
+            return $@"
+                <li class='d-flex align-items-center mb-2 p-3'>
+                    <div class='d-flex justify-content-center align-items-center bg-primary text-center text-white rounded-circle me-2' style='width: 48px; height: 48px;'>
+                        {initial}
+                    </div>
+                    <div>
+                        <strong>{email}</strong>
+                        <p class='mb-0'>{stars}</p>
+                    </div>
+                </li>";
+        }
     }
 }
