@@ -183,7 +183,7 @@ namespace VC_Studio_Client
 
         private void StoreInDatabase(string fullName, string emailId, string mobileNo, string subject, string message)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString;
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\New_Virtual\\Virtual-Collab-Studio\\VC-Studio-Client\\App_Data\\VirtualCollabStudioDB.mdf;Integrated Security=True"; // Replace with your actual database connection string
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string query = @"
