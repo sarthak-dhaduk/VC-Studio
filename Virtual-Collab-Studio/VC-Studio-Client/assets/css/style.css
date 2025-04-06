@@ -1,14 +1,4 @@
-﻿/**
-* Template Name: NiceAdmin
-* Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-* Updated: Apr 20 2024 with Bootstrap v5.3.3
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
-/*--------------------------------------------------------------
-# General
---------------------------------------------------------------*/
+﻿
 :root {
     scroll-behavior: smooth;
 }
@@ -82,6 +72,8 @@ h6 {
 /*--------------------------------------------------------------
 # Custom CSS for the Components
 --------------------------------------------------------------*/
+
+/* Hide the default Bootstrap chevron icon */
 .accordion-button::after {
     display: none;
 }
@@ -462,39 +454,6 @@ code {
     outline: none !important;
     box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1) !important;
     padding: 9px 14px !important;
-}
-
-#codeEditor {
-    width: 100%;
-    height: 500px;
-    background: transparent !important;
-}
-
-.monaco-editor {
-    background-color: #0D0F10 !important;
-    border: 0.1px solid #282828;
-}
-
-.monaco-editor-background {
-    background: transparent !important;
-}
-
-.margin {
-    background: transparent !important;
-}
-
-canvas {
-    height: 499px !important;
-}
-
-.minimap-decorations-layer {
-    background-color: #000000b8 !important;
-    border: 0.1px solid #282828;
-    height: 499px !important;
-}
-
-.decorationsOverviewRuler {
-    width: 0px !important;
 }
 
 .slider {

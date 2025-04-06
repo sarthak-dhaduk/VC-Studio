@@ -70,7 +70,7 @@ namespace VC_Studio_Client
             Response.Write("<script>alert('SendEmail method triggered');</script>");
             System.Diagnostics.Debug.WriteLine("SendEmail method triggered");
             string fromEmail = "jkalariya487@rku.ac.in";
-            string fromEmailPassword = "Jigar.Rku@123456";
+            string fromEmailPassword = "Rku@123456";
             string toEmail = "tech.solutions1771@gmail.com";
 
             try
@@ -183,7 +183,7 @@ namespace VC_Studio_Client
 
         private void StoreInDatabase(string fullName, string emailId, string mobileNo, string subject, string message)
         {
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\New_Virtual\\Virtual-Collab-Studio\\VC-Studio-Client\\App_Data\\VirtualCollabStudioDB.mdf;Integrated Security=True"; // Replace with your actual database connection string
+            string connectionString = ConfigurationManager.ConnectionStrings["CollaborativeCodeEditor"].ConnectionString;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string query = @"

@@ -1,14 +1,14 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.Master.cs" Inherits="VC_Studio_Client.MasterPage" %>
 
-<html>
+<html style="overflow: hidden;">
 <head runat="server">
-    <link href="../content/bootstrap.min.css" rel="stylesheet" />
+    <link href="content/bootstrap.min.css" rel="stylesheet" />
     <script src="scripts/bootstrap.bundle.min.js" defer></script>
     <script src="scripts/bootstrap.min.js" defer></script>
-    <link rel="icon" href="../assets/icons/icon2.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/icons/icon2.svg" type="image/svg+xml">
     <link href="assets/css/style.css" rel="stylesheet" />
-    <link href="../assets/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
-
+    <link href="assets/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <script src="scripts/jQuery.min.js"></script>
     <title></title>
 </head>
 
@@ -118,9 +118,9 @@
                                 aria-expanded="true" aria-controls="workspaceCollapse">
                                 <span>Workspace</span>
                             </li>
-                            <button class="btn btn-sm gradient-component" id="joinWorkSpace" data-bs-toggle="modal" data-bs-target="#joinmodal">
+                            <asp:LinkButton class="btn btn-sm gradient-component" ID="joinWorkSpace" data-bs-toggle="modal" data-bs-target="#joinmodal">
                                 <span>JOIN</span>
-                            </button>
+                            </asp:LinkButton>
                         </div>
                         <div id="workspaceCollapse" class="accordion-collapse collapse show" aria-labelledby="workspaceHeading"
                             data-bs-parent="#generalAccordion">
@@ -146,9 +146,11 @@
                         </div>
                         <li class="mt-auto">
                             <div class="nav-link text-light d-flex align-items-center" style="height: 60px; position: relative; padding: 16px;">
-                                <div class="d-flex justify-content-center align-items-center bg-primary text-center text-white rounded-circle me-2"
+                                <div class="d-flex justify-content-center align-items-center text-white rounded-circle me-2 session-based-div"
                                     style="width: 40px; height: 40px;">
-                                    J
+                                    <%= Session["Email"] != null && Session["Email"].ToString().Length > 0 
+        ? Session["Email"].ToString().Substring(0, 1).ToUpper() 
+        : "U" %>
                                 </div>
                                 <div>
                                     <span id="lblUserEmail"><%= Session["Email"] %></span>
@@ -206,7 +208,9 @@
                                 <span class="ms-2">Sign In</span>
                             </a>
                         </li>
-                        <% } %>
+                        <% }
+
+                        %>
                     </ul>
                 </aside>
             </div>
@@ -309,8 +313,7 @@
                                 </span>
 
                                 <asp:TextBox ID="roomIdInput" runat="server" Style="border-radius: 0px 8px 8px 0px; border-left: none;" class="form-control" placeholder="Email"></asp:TextBox>
-                                <!--<input id="roomIdInput" type="text" style="border-radius: 0px 8px 8px 0px; border-left: none;"
-                                    placeholder="02JK17SD" aria-label="Workspace Code" readonly />-->
+
                                 <button
                                     id="copyButton"
                                     type="button"
@@ -355,11 +358,9 @@
                 team and
                 collaborate seamlessly on coding projects in real time:</span>
                             <div class="input-field mt-2 d-flex align-items-center">
-                                <!-- Text Field -->
                                 <input type="text" id="roomId" style="border-radius: 8px" placeholder="Workspace ID"
                                     aria-label="Workspace Code">
 
-                                <!-- Join Button -->
                                 <button class="btn btn-primary ms-2 d-flex align-items-center" type="button" data-bs-dismiss="modal" aria-label="Close"
                                     style="background-color: #7DEA4D; color: #0C1132; border-color: #7DEA4D; border-radius: 12px;" id="joinRoom">
                                     <svg width="19" height="21" viewBox="0 0 19 21" fill="none"
@@ -394,59 +395,55 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="border-radius: 16px;">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="profileSettingsModalLabel">Update Your Profile
-                        Information</h5>
+                            <h5 class="modal-title" id="profileSettingsModalLabel">Update Your Profile Information</h5>
                             <button type="button" class="btn-close" style="filter: invert(1);" data-bs-dismiss="modal"
                                 aria-label="Close">
                             </button>
-
                         </div>
                         <div class="modal-body">
                             <p style="color: #9B9C9E">
-                                Edit your name, mobile number, and password as needed, then
-                        click 'Save Changes' to keep your profile up to date.
+                                Edit your name, mobile number, and password as needed, then click 'Save Changes' to keep your profile up to date.
                             </p>
                             <div class="p-3">
                                 <div class="row g-3">
                                     <div class="col-md-6 custom-input-field">
                                         <label for="firstName" class="form-label" style="color: #9B9C9E">
-                                            First
-                                    Name</label>
-                                        <input type="text" style="border-radius: 8px" id="firstName"
-                                            placeholder="Yash Lalani">
+                                            First Name
+                                        </label>
+                                        <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control" placeholder="Enter your first name"></asp:TextBox>
                                     </div>
                                     <div class="col-md-6 custom-input-field">
                                         <label for="email" class="form-label" style="color: #9B9C9E">
-                                            Email
-                                    Address</label>
-                                        <input type="email" style="border-radius: 8px" id="email"
-                                            placeholder="lyash031@rku.ac.in">
+                                            Email Address
+                                        </label>
+                                        <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" TextMode="Email"
+                                            Style="border-radius: 8px" placeholder="User@gmail.com"></asp:TextBox>
                                     </div>
-
                                 </div>
 
                                 <div class="row g-3 mt-3">
                                     <div class="col-md-6 custom-input-field">
-                                        <label for="lastName" class="form-label" style="color: #9B9C9E">
-                                            Mobile
-                                    No.</label>
-                                        <input type="text" style="border-radius: 8px" id="lastName"
-                                            placeholder="6351703536">
+                                        <label for="Mobile" class="form-label" style="color: #9B9C9E">
+                                            Mobile No.
+                                        </label>
+                                        <asp:TextBox ID="txtMobile" runat="server" CssClass="form-control"
+                                            Style="border-radius: 8px" placeholder="6351703536"></asp:TextBox>
                                     </div>
                                     <div class="col-md-6 custom-input-field">
-                                        <label for="phone" class="form-label" style="color: #9B9C9E">Password</label>
-                                        <input type="text" style="border-radius: 8px" id="phone" placeholder="********">
+                                        <label for="phone" class="form-label" style="color: #9B9C9E">
+                                            Password
+                                        </label>
+                                        <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control"
+                                            Style="border-radius: 8px" TextMode="Password" placeholder="********"></asp:TextBox>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="modal-footer" style="border-top: none; display: flex; justify-content: center;">
-                            <button type="button" class="btn btn-primary"
-                                style="background-color: #7DEA4D; color: #0C1132; border-color: #7DEA4D;">
-                                Save Changes
-
-                        <svg width="34" height="32" viewBox="0 0 34 32" fill="none"
+                            <asp:LinkButton ID="btnSaveChanges" runat="server" OnClick="btnSaveChanges_Click" CssClass="btn btn-primary"
+                                Style="background-color: #7DEA4D; color: #0C1132; border-color: #7DEA4D;">
+                    Save Changes
+                                <svg width="34" height="32" viewBox="0 0 34 32" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <rect width="34" height="32" rx="12" fill="#1C1C1E" />
                             <path
@@ -454,12 +451,13 @@
                                 stroke="#7DEA4D" stroke-width="1.5" stroke-linecap="round"
                                 stroke-linejoin="round" />
                         </svg>
-
-                            </button>
+                            </asp:LinkButton>
                         </div>
                     </div>
                 </div>
             </div>
+
+
             <div class="modal fade" id="logoutmodal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -527,8 +525,8 @@
                                                 stroke="#686B6E" stroke-width="1.5" stroke-linecap="round"
                                                 stroke-linejoin="round" />
                                         </svg>
-                                        <input type="text" id="title" class="w-100 ms-2"
-                                            placeholder="Search for coding solutions, examples, or insights...">
+                                        <input type="text" id="title" class="w-100 ms-2" placeholder="Search for coding solutions, examples, or insights..." onkeyup="redirectToBlogs()">
+                                        <%--<div id="suggestion-box" class="mt-5" style="position: absolute; background: white; border: 1px solid #ccc; width: 100%; z-index: 1000;"></div>--%>
                                         <span class="btn-sm d-flex align-items-center ms-1 mb-md-0 justify-content-start">
                                             <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
@@ -566,5 +564,84 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs/loader.min.js"></script>
     <script src="assets/js/index.js" defer></script>
+    <script>
+        var typingTimer;
+        var doneTypingInterval = 1000; // 1-second delay
+
+        function redirectToBlogs() {
+            var title = document.getElementById("title").value.trim(); // Trim whitespace
+            clearTimeout(typingTimer);
+
+            if (title.length > 0) {
+                // Fetch suggestions while the user is typing
+                fetchSuggestions(title);
+
+                typingTimer = setTimeout(function () {
+                    var currentUrl = window.location.href;
+                    var urlParams = new URLSearchParams(window.location.search);
+                    var currentSearch = urlParams.get("search") || "";
+
+                    // Check if already on blog.aspx and search query matches
+                    if (currentUrl.includes("blog.aspx") && decodeURIComponent(currentSearch) === title) {
+                        // Do nothing if already on the page with the same search query
+                        return;
+                    }
+
+                    // Redirect only if the search term is different
+                    window.location.href = "blog.aspx?search=" + encodeURIComponent(title);
+                }, doneTypingInterval);
+            }
+        }
+
+        function fetchSuggestions(query) {
+            // Make an AJAX request to fetch suggestions
+            fetch("blog.aspx/GetSuggestions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    displaySuggestions(data.d);
+                })
+                .catch(error => console.error("Error fetching suggestions:", error));
+        }
+
+        function displaySuggestions(suggestions) {
+            var suggestionBox = document.getElementById("suggestion-box");
+            suggestionBox.innerHTML = ""; // Clear previous suggestions
+
+            suggestions.forEach(function (suggestion) {
+                var suggestionItem = document.createElement("div");
+                suggestionItem.className = "suggestion-item";
+                suggestionItem.textContent = suggestion;
+
+                // Add click event to select a suggestion
+                suggestionItem.addEventListener("click", function () {
+                    document.getElementById("title").value = suggestion;
+                    suggestionBox.innerHTML = ""; // Clear suggestions
+                });
+
+                suggestionBox.appendChild(suggestionItem);
+            });
+        }
+
+        window.onload = function () {
+            var searchParam = new URLSearchParams(window.location.search).get("search");
+            if (searchParam) {
+                document.getElementById("title").value = decodeURIComponent(searchParam);
+            }
+        };
+
+        // Add event listener for "/"
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "/") {
+                event.preventDefault();
+                document.getElementById("title").focus();
+            }
+        });
+    </script>
 </body>
 </html>

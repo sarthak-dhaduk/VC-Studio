@@ -11,7 +11,7 @@ namespace VC_Studio_Client
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
         }
     }
 }
