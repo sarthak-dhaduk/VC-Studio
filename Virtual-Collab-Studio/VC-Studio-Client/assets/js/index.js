@@ -297,9 +297,6 @@ if (document.getElementById('showRunButton')) {
 
 
 
-
-
-
 const copyButton = document.getElementById("copyButton");
 const copyButtonText = document.getElementById("copyButtonText");
 
@@ -664,3 +661,130 @@ if (document.getElementById('closeButton')) {
     }
 
 })();
+const stars = document.querySelectorAll('.star');
+const ratingValueInput = document.getElementById('ratingValue');
+
+stars.forEach((star, index) => {
+    star.addEventListener('click', () => {
+        // Update active class
+        stars.forEach((s, i) => {
+            s.classList.toggle('active', i <= index);
+        });
+
+        // Set the value of the hidden input
+        ratingValueInput.value = index + 1;
+        console.log('Rating selected:', ratingValueInput.value); // For debugging
+    });
+    const stars = document.querySelectorAll('.star');
+    const ratingValueInput = document.getElementById('ratingValue');
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const rating = star.getAttribute('data-value');
+            ratingValueInput.value = rating;
+
+            stars.forEach(s => s.classList.remove('active'));
+            for (let i = 0; i < rating; i++) {
+                stars[i].classList.add('active');
+            }
+        });
+    });
+
+
+    star.addEventListener('mouseover', () => {
+        // Highlight stars on hover
+        stars.forEach((s, i) => {
+            s.classList.toggle('active', i <= index);
+        });
+    });
+
+    star.addEventListener('mouseout', () => {
+        // Reset highlight to current rating value
+        const currentRating = ratingValueInput.value;
+        stars.forEach((s, i) => {
+            s.classList.toggle('active', i < currentRating);
+        });
+    });
+});
+function openModal(id, obj) {
+    // Get the modal element
+    var myModal = new bootstrap.Modal(document.getElementById(id));
+
+    // Show the modal
+    myModal.show();
+
+    // Get userblogwrapper obj then find input id 
+    var parentWithClass = obj.closest('.userblogwrapper');
+
+    var inputElement = parentWithClass.querySelector('.userUniqueId');
+
+    // Get the value of the input element
+    var inputValue = inputElement ? inputElement.value : null;
+    document.getElementById("userblogId").value = inputValue;
+    console.log(inputValue);
+    return false;
+}
+document.addEventListener("DOMContentLoaded", function () {
+    // Select all elements with the class 'codecontent'
+    const codeElements = document.querySelectorAll(".codecontent");
+
+    codeElements.forEach(codeElement => {
+        // Clean the code content: remove extra spaces and unwanted line breaks
+        let codeContent = codeElement.textContent;
+
+        let cleanedCode = codeContent.replace(/[\r\n]+/g, '\n')   // Normalize line breaks
+            .replace(/^\s+|\s+$/g, '')   // Trim leading/trailing spaces
+            .replace(/[ \t]+/g, ' ')     // Replace multiple spaces/tabs with a single space
+            .replace(/\n+/g, '\n');      // Remove extra newlines
+
+        // Set the cleaned content back to the code block
+        codeElement.textContent = cleanedCode;
+
+        // Get the corresponding 'lineNumbers' div
+        const lineNumbersElement = codeElement.previousElementSibling;
+
+        // Get the code text content and split it into lines
+        const codeLines = cleanedCode.split("\n");
+        let lineNumberHTML = "";
+
+        // Generate the line numbers
+        for (let i = 1; i <= codeLines.length; i++) {
+            lineNumberHTML += i + "<br>";
+        }
+
+        // Insert the line numbers into the 'lineNumbers' div
+        lineNumbersElement.innerHTML = lineNumberHTML;
+    });
+});
+
+const gradientMap = new Map(); // Map to store gradients for each unique initial
+const colors = [
+    "#D90000", // Dark Red
+    "#FF7F00", // Orange
+    "#FFD700", // Golden Yellow
+    "#00B400", // Emerald Green
+    "#0073E6", // Deep Sky Blue
+    "#4B0082", // Indigo
+    "#9400D3"  // Dark Violet
+];
+
+function getOrGenerateGradient(initial) {
+    if (!gradientMap.has(initial)) {
+        // Generate a random gradient for the initial
+        const color1 = colors[Math.floor(Math.random() * colors.length)];
+        const color2 = colors[Math.floor(Math.random() * colors.length)];
+        gradientMap.set(initial, `linear-gradient(135deg, ${color1}, ${color2})`);
+    }
+    return gradientMap.get(initial); // Return the gradient for the initial
+}
+
+// Apply gradients to divs based on their session-derived initial
+document.addEventListener("DOMContentLoaded", function () {
+    const divs = document.querySelectorAll(".session-based-div");
+
+    divs.forEach((div) => {
+        const initial = div.textContent.trim(); // Get the initial from the div content
+        const gradient = getOrGenerateGradient(initial); // Get or generate a gradient
+        div.style.background = gradient; // Apply the gradient to the div
+    });
+});

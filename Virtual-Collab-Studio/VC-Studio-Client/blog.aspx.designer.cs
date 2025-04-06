@@ -15,21 +15,21 @@ namespace VC_Studio_Client
     {
 
         /// <summary>
-        /// lblRating control.
+        /// lblError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblRating;
+        protected global::System.Web.UI.WebControls.Label lblError;
 
         /// <summary>
-        /// reviewsList control.
+        /// rptBlogs control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl reviewsList;
+        protected global::System.Web.UI.WebControls.Repeater rptBlogs;
     }
 }
