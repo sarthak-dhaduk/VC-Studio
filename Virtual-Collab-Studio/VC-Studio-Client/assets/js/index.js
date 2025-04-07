@@ -6,7 +6,12 @@ const languageDropdown = document.getElementById("languageDropdown");
 const stdinBox = document.getElementById("stdinBox");
 const outputBox = document.getElementById("outputBox");
 const userListDiv = document.getElementById("memberCollapse");
-const userEmail = document.getElementById("lblUserEmail").innerText;
+var userEmail;
+const lbl = document.getElementById("lblUserEmail");
+if (lbl) {
+    userEmail = lbl.innerText;
+}
+
 const roomIdInputCopy = document.getElementById("roomIdInput");
 const txtInputTitle = document.getElementById("txtInputTitle");
 const postCode = document.getElementById("postCode");
